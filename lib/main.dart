@@ -15,10 +15,22 @@ void main() {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.system;
+
+  void _toggleThemeMode(bool isDarkMode) {
+    setState(() {
+      _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
@@ -49,7 +61,11 @@ class MyApp extends StatelessWidget {
             colorScheme: darkColorScheme,
             useMaterial3: true,
           ),
-          home: const MyHomePage(title: 'Flutter Demo Home Page'),
+          themeMode: _themeMode, // Apply the theme mode
+          home: MyHomePage(
+            title: 'Flutter Demo Home Page',
+            onThemeModeChanged: _toggleThemeMode,
+          ),
         );
       },
     );
@@ -57,18 +73,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  const MyHomePage({super.key, required this.title, required this.onThemeModeChanged});
 
   final String title;
+  final ValueChanged<bool> onThemeModeChanged;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -86,11 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
         accelerometerEventStream(samplingPeriod: SensorInterval.uiInterval)
             .listen((AccelerometerEvent event) {
       setState(() {
-        // Determine rotation based on accelerometer data
-        // Assuming portrait up is 0 degrees
-        // Landscape left (home button right) is -pi/2
-        // Landscape right (home button left) is pi/2
-        // Portrait down (upside down) is pi
         // Determine rotation based on accelerometer data
         // Assuming portrait up is 0 degrees
         // Landscape left (home button right) is -pi/2
@@ -136,6 +139,13 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          Switch(
+            value: Theme.of(context).brightness == Brightness.dark,
+            onChanged: widget.onThemeModeChanged,
+            activeColor: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ],
       ),
       body: Center(
         child: Column(
