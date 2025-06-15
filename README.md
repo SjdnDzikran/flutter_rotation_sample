@@ -17,4 +17,6 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Project Description
 
-This is a sample Flutter project demonstrating how to detect the physical device orientation using the `sensors_plus` package and rotate a specific UI element (a number counter) in the *opposite* direction of the device's landscape rotation, while keeping the overall application locked in portrait mode.
+This is a sample Flutter project demonstrating how to:
+*   Detect the physical device orientation using the `sensors_plus` package and rotate a specific UI element (a number counter) in the *opposite* direction of the device's landscape rotation, while keeping the overall application locked in portrait mode.
+*   Implement dynamic coloring based on the device's wallpaper using the `dynamic_color` package, allowing the app's theme to adapt to system-level color palettes.
