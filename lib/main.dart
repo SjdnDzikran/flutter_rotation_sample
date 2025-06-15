@@ -142,8 +142,9 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text('You have pushed the button this many times:'),
-            Transform.rotate(
-              angle: _rotationAngle,
+            AnimatedRotation(
+              turns: _rotationAngle / (2 * pi), // Convert radians to turns
+              duration: const Duration(milliseconds: 300), // Animation duration
               child: Text(
                 '$_counter',
                 style: Theme.of(context).textTheme.headlineMedium,
